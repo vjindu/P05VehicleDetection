@@ -1,6 +1,8 @@
 # P05VehicleDetection
 
-# Q 1. Extraction of features from the image dataset
+
+
+## Q 1 & 2. Extraction of features from the image dataset
 In order for proper classification of images into cars and non cars, features of the give image dataset are extracted. 
 
 Shape features and color features were extracted using the following methods, Histogram of orientation features (HOG), binning color feature and color histogram features.
@@ -16,6 +18,13 @@ single_img_features(image, color_space=color_space,
                             hist_feat=hist_feat, hog_feat=hog_feat)
 ```
 
+We read in all the images of car and non-car from the dataset provided. An example of car and non car images are displayed below
+
+![alt text][car_noCar]
+
+The HOG features were tested for various color spaces and the result image is displayed below.
+
+![alt text][HOG_car_noCar]
 
 
 After a lot of trial and error LUV and RGB color spaces seemed to be giving the best results for training using LinearSVM classifier.
@@ -34,6 +43,34 @@ hist_feat = True # Histogram features on or off
 hog_feat = True # HOG features on or off
 y_start_stop = [None, None] # Min and max in y to search in slide_window()
 ``` 
+
+## Q 3. Classifier used for classification and parameters
+
+Spatial histogram and hog features were extracted for classification of images between vehicle and non-vehicle. 
+
+The extracted classification data combining vehicle and non-vehicle was first normalised using ``` StandardScaler() ``` function from scikitlearn (sklearn.preprocessing) function. 20 percent of the data is split into validation data and the remaining 80 percent is used for training the classifier. 
+
+The classifier used was a ``` LinearSVC ``` classifier from sklearn.svm . Hinge loss funtion was used for liear classifier.
+
+The code was implemented in 7th codeblock of the jupyter notebook file.
+
+# Sliding window search for cars adn non-cars
+
+## Q 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ##Writeup Template
 ###You can use this file as a template for your writeup if you want to submit it as a markdown file, but feel free to use some other method and submit a pdf if you prefer.
@@ -85,11 +122,11 @@ Here is an example using the `YCrCb` color space and HOG parameters of `orientat
 
 ![alt text][image2]
 
-####2. Explain how you settled on your final choice of HOG parameters.
+#### 2. Explain how you settled on your final choice of HOG parameters.
 
 I tried various combinations of parameters and...
 
-####3. Describe how (and identify where in your code) you trained a classifier using your selected HOG features (and color features if you used them).
+#### 3. Describe how (and identify where in your code) you trained a classifier using your selected HOG features (and color features if you used them).
 
 I trained a linear SVM using...
 
