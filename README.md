@@ -1,8 +1,39 @@
 # P05VehicleDetection
 
-# Q 1. Extraction of features for the dataset
-In order to extract shape features and color features
-Histogram of orientation features (HOG), bin color feature and color histogram feature of the dataset to extract 
+# Q 1. Extraction of features from the image dataset
+In order for proper classification of images into cars and non cars, features of the give image dataset are extracted. 
+
+Shape features and color features were extracted using the following methods, Histogram of orientation features (HOG), binning color feature and color histogram features.
+
+The code used for extraction of features from each single image is defined in the following functon in 3rd code block of ipython file.
+
+``` python
+single_img_features(image, color_space=color_space, 
+                            spatial_size=spatial_size, hist_bins=hist_bins, 
+                            orient=orient, pix_per_cell=pix_per_cell, 
+                            cell_per_block=cell_per_block, 
+                            hog_channel=hog_channel, spatial_feat=spatial_feat, 
+                            hist_feat=hist_feat, hog_feat=hog_feat)
+```
+
+
+
+After a lot of trial and error LUV and RGB color spaces seemed to be giving the best results for training using LinearSVM classifier.
+LUV seems to be performing a little better than RGB. The spatial size, orient, hog_channel were all tuned to give the best result for the available dataset. The final tuned parameters can be seen below. 
+
+``` python
+color_space = 'LUV' # Can be RGB, GRAY, HSV, LUV, HLS, YUV, YCrCb
+orient = 8  # HOG orientations
+pix_per_cell = 8 # HOG pixels per cell
+cell_per_block = 2 # HOG cells per block
+hog_channel = "ALL" # Can be 0, 1, 2, or "ALL"
+spatial_size = (16, 16) # Spatial binning dimensions
+hist_bins = 32    # Number of histogram bins
+spatial_feat = True # Spatial features on or off
+hist_feat = True # Histogram features on or off
+hog_feat = True # HOG features on or off
+y_start_stop = [None, None] # Min and max in y to search in slide_window()
+``` 
 
 ##Writeup Template
 ###You can use this file as a template for your writeup if you want to submit it as a markdown file, but feel free to use some other method and submit a pdf if you prefer.
