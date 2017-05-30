@@ -2,7 +2,7 @@
 
 
 
-## Q 1 & 2. Extraction of features from the image dataset
+## 1 & 2. Extraction of features from the image dataset
 In order for proper classification of images into cars and non cars, features of the give image dataset are extracted. 
 
 Shape features and color features were extracted using the following methods, Histogram of orientation features (HOG), binning color feature and color histogram features.
@@ -44,7 +44,7 @@ hog_feat = True # HOG features on or off
 y_start_stop = [None, None] # Min and max in y to search in slide_window()
 ``` 
 
-## Q 3. Classifier used for classification and parameters
+## 3. Classifier used for classification and parameters
 
 Spatial histogram and hog features were extracted for classification of images between vehicle and non-vehicle. 
 
@@ -56,8 +56,10 @@ The code was implemented in 7th codeblock of the jupyter notebook file.
 
 # Sliding window search for cars and non-cars
 
-## Q 4. Region selection and applying sliding window
-Sliding window techniq similar to the method presented in the course lectures was used. The following box sizes 32 X 32, 64 X 64, 96 X 96  and 128 X 128  with corresponding y start and y stop limits can be observed in the code below. It can be observed that smaller boxes were chosen for upper lines. This is so smaller cars would be detcted at top of the image. Bigger boxes are used for the area of the image close to the car. All the boxed image areas are rescaled to 64 X 64 to fit the training data. 
+## 4. Region selection and applying sliding window
+Sliding window techniq similar to the method presented in the course lectures was used. The following box sizes 32 X 32, 64 X 64, 96 X 96  and 128 X 128  with corresponding y start and y stop limits can be observed in the code below. It can be observed that smaller boxes were chosen for upper lines. This is so smaller cars would be detcted at top of the image. Bigger boxes are used for the area of the image close to the car. smaller scales are  used for area farther from our car. This is due to the fact that the farther the distance from the car the smaller the perspective size of the vehicle in a camera image. the y limit was chose to be 400 any images above were filtered (it was assumed only trees and sky was visible around that area which is not important for detecting cars).
+
+All the boxed image areas are rescaled to 64 X 64  and normalised to fit the training data. 
 
 ``` python
 windowLimit = [((32, 32),  [400, 464]),
@@ -68,7 +70,11 @@ windowLimit = [((32, 32),  [400, 464]),
                ]
 ``` 
 
-The overlapping of images were set to 0.5 and 0.5 in both x and y directions. Increasing the overlap limit would make more images but would give better values. But at the cost of processing time. So we chose to remain at these points. 
+same parameters for training(mentioned in the above section) are used also for classification.
+
+It was observed that LUV and RGB color spaces performed well in my case. LUV color space was a little better than RGB.
+
+The overlapping of images were set to 0.5 and 0.5 in both x and y directions. Increasing the overlap limit would make more images but would give better values. But at the cost of processing time. So we chose to remain at these values. 
 
 An image of all the boxes where  cars are searched can be seen in the figure below.
 ![alt text][allBoxes]
@@ -92,6 +98,8 @@ A few example images after detecting the car boxes using the  ``` search_windows
 
 ![alt text][boximg_before_FP_ex5]
 
+## 5. Filtering False Positive areas in the image
+
 It could be observed from the above images that a few areas of the image without a car are also detected as areas with car. In order to filter those false positives in the image we add the number of boxes per image and do heat thresholding. These methods are implemented as described in the course. Then single box are drawn around the heat thresholded values. This method helps in eliminating the false positives.
 
 The heat images after adding the heat and thresholding can be observed in the images below
@@ -100,6 +108,12 @@ The heat images after adding the heat and thresholding can be observed in the im
 
 ![alt text][Heat_Map_ex2]
 
+
+The final images after thresholding can be observed below
+
+![alt text][after_FP_ex1]
+
+![alt text][after_FP_ex2]
 
 The code for hot boxes thresholding and drawing boxes can be seen in code block 9
 
@@ -110,6 +124,52 @@ heat_threshold(heatmap, threshold)
 draw_full_boxes(img, labels)
 
 ```
+
+## 6. Increasing the reliability of the model with hard mining.
+
+There were still a few false positives after performing the heat thresholding. In order to eliminate this issue a few frames of image were taken and all the detected images are converted into 64 X 64 and saved. All the false positive images from the mined images are selected and added to the non-vehicle images bataset. This increased the reliability of the video by reducing false positives to half. and the classifier test accuracy increased by around 2 percent from 0.944 to 0.962. 
+
+The code for hardming can be observed in codeblock 10
+
+The function blocks used for this are
+```
+hardMining_ImgData(image)
+get64_64_imgs(img, allWindows, img_number)  ## convert imgs from any shape to 64 X 64
+```
+# Video pipeline and tracking cars in the video
+
+## 7. Video pipeline 
+
+The output video 'DetectedCars_out.mp4' is attached to the project submission. It can be observed from the video that both the white and black cars are tracked reasonably well throughout the entire video. Thought there were a few issues.
+
+The video pipeline is implemented in codeblock 12. For the video pipeline the color space, HOG features, binning dimensions and so on are the same as during training the linearSVM classifier for classification. 
+
+The video pipeline function is 
+```
+process_pipeline(image)
+```
+
+MoviePy is used for generating videos from the pipeline. It is implemented in codeblocks 14 and 15 or the last two codeblocks. 
+
+## 8. Tracking cars and locking cars
+
+Initially tracking was not implemented and it was observed that the detected boxes were jumping from small to lare. Although the cars are being detected. 
+
+In order to avoid this issue a tracking algorithm was implemented to track the cars make sure its not a false positive in ``` process_pipeline(image) ``` function. 
+The tracking function is implemented in codeblock 11. It is called as follows
+```
+lock_boxes(boxes, prev_list)
+```
+In this algorithm cars are locked if they are continuously detected for 5 consecutive frames and unlocked if they are not detected for 5 consecutive frames. The boxes are only displayed if they are locked.
+
+# Problems faced and potential solutions
+
+It can be observed that the black car is lost for a second in the middle of the video. This could be because of over filtering during heat map thresholding. There are still false positives which could be because of lack of data or better classification. 
+
+Better tuning of Color / Spatial parameters could help in solving this problem. Hardmining more images could also help in reducing 
+
+
+After implementing the algorithm for tracking the cars. It can be observed that there are more than 2 boxes sometimes for one car.  And the box could be moving in a smooth form instead of jumping. This could be elimiated by better implementation of the algorithm.
 
 
 ##Writeup Template
@@ -197,19 +257,6 @@ I recorded the positions of positive detections in each frame of the video.  Fro
 
 Here's an example result showing the heatmap from a series of frames of video, the result of `scipy.ndimage.measurements.label()` and the bounding boxes then overlaid on the last frame of video:
 
-### Here are six frames and their corresponding heatmaps:
-
-![alt text][image5]
-
-### Here is the output of `scipy.ndimage.measurements.label()` on the integrated heatmap from all six frames:
-![alt text][image6]
-
-### Here the resulting bounding boxes are drawn onto the last frame in the series:
-![alt text][image7]
-
-
-
----
 
 ###Discussion
 
