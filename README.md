@@ -20,12 +20,12 @@ single_img_features(image, color_space=color_space,
 
 We read in all the images of car and non-car from the dataset provided. An example of car and non car images are displayed below
 
-![png][car_noCar.png]
+![png](car_noCar.png)
 
 The HOG features were tested for various color spaces and the result image is displayed below.
 
-![alt text][HOG_RGB_Gray_HSV.png]
-![alt text][HOG_LUV_HLS_YUV.png]
+![png](HOG_RGB_Gray_HSV.png)
+![png](HOG_LUV_HLS_YUV.png)
 
 After a lot of trial and error LUV and RGB color spaces seemed to be giving the best results for training using LinearSVM classifier.
 LUV seems to be performing a little better than RGB. The spatial size, orient, hog_channel were all tuned to give the best result for the available dataset. The final tuned parameters can be seen below. 
@@ -77,7 +77,7 @@ It was observed that LUV and RGB color spaces performed well in my case. LUV col
 The overlapping of images were set to 0.5 and 0.5 in both x and y directions. Increasing the overlap limit would make more images but would give better values. But at the cost of processing time. So we chose to remain at these values. 
 
 An image of all the boxes where  cars are searched can be seen in the figure below.
-![alt text][allBoxes.png]
+![png](allBoxes.png)
 
 All the box coordinates are passed through a function called ``` search_windows() ``` . This function is used to search the window and classify if the box image is car. If the box image is detected to be car then the box coordinates are saved for further processing.
 
@@ -94,9 +94,9 @@ search_windows(img, windows, clf, scaler, color_space='RGB',
 
 A few example images after detecting the car boxes using the  ``` search_windows() ``` funciton can be seen below
 
-![alt text][boximg_before_FP_ex2.png]
+![png](boximg_before_FP_ex2.png)
 
-![alt text][boximg_before_FP_ex5.png]
+![png](boximg_before_FP_ex5.png)
 
 ## 5. Filtering False Positive areas in the image
 
@@ -104,16 +104,16 @@ It could be observed from the above images that a few areas of the image without
 
 The heat images after adding the heat and thresholding can be observed in the images below
 
-![alt text][Heat_Map_ex1.png]
+![png](Heat_Map_ex1.png)
 
-![alt text][Heat_Map_ex2.png]
+![png](Heat_Map_ex2.png)
 
 
 The final images after thresholding can be observed below
 
-![alt text][after_FP_ex1.png]
+![png](after_FP_ex1.png)
 
-![alt text][after_FP_ex2.png]
+![png](after_FP_ex2.png)
 
 The code for hot boxes thresholding and drawing boxes can be seen in code block 9
 
