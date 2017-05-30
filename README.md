@@ -24,8 +24,8 @@ We read in all the images of car and non-car from the dataset provided. An examp
 
 The HOG features were tested for various color spaces and the result image is displayed below.
 
-![alt text][HOG_car_noCar]
-
+![alt text][HOG_RGB_Gray_HSV]
+![alt text][HOG_LUV_HLS_YUV]
 
 After a lot of trial and error LUV and RGB color spaces seemed to be giving the best results for training using LinearSVM classifier.
 LUV seems to be performing a little better than RGB. The spatial size, orient, hog_channel were all tuned to give the best result for the available dataset. The final tuned parameters can be seen below. 
@@ -54,13 +54,21 @@ The classifier used was a ``` LinearSVC ``` classifier from sklearn.svm . Hinge 
 
 The code was implemented in 7th codeblock of the jupyter notebook file.
 
-# Sliding window search for cars adn non-cars
+# Sliding window search for cars and non-cars
 
-## Q 
-
-
+## Q 4. Region selection and applying sliding window
 
 
+
+``` python
+windowLimit = [
+               ((64, 64),  [400, 500]),
+           ((96, 96),  [400, 500]),
+           ((128, 128),[450, 600])#,
+           #((256, 256),[380, 640])
+              ]
+``` 
+![alt text][allBoxes]
 
 
 
