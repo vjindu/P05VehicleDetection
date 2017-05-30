@@ -57,27 +57,59 @@ The code was implemented in 7th codeblock of the jupyter notebook file.
 # Sliding window search for cars and non-cars
 
 ## Q 4. Region selection and applying sliding window
-
-
+Sliding window techniq similar to the method presented in the course lectures was used. The following box sizes 32 X 32, 64 X 64, 96 X 96  and 128 X 128  with corresponding y start and y stop limits can be observed in the code below. It can be observed that smaller boxes were chosen for upper lines. This is so smaller cars would be detcted at top of the image. Bigger boxes are used for the area of the image close to the car. All the boxed image areas are rescaled to 64 X 64 to fit the training data. 
 
 ``` python
-windowLimit = [
+windowLimit = [((32, 32),  [400, 464]),
                ((64, 64),  [400, 500]),
-           ((96, 96),  [400, 500]),
-           ((128, 128),[450, 600])#,
-           #((256, 256),[380, 640])
-              ]
+               ((96, 96),  [400, 500]),
+               ((128, 128),[450, 600])#,
+               #((256, 256),[380, 640])
+               ]
 ``` 
+
+The overlapping of images were set to 0.5 and 0.5 in both x and y directions. Increasing the overlap limit would make more images but would give better values. But at the cost of processing time. So we chose to remain at these points. 
+
+An image of all the boxes where  cars are searched can be seen in the figure below.
 ![alt text][allBoxes]
 
+All the box coordinates are passed through a function called ``` search_windows() ``` . This function is used to search the window and classify if the box image is car. If the box image is detected to be car then the box coordinates are saved for further processing.
+
+The searching window function is defined in codeblock 8 in the jupyter notebook.
+
+```
+search_windows(img, windows, clf, scaler, color_space='RGB', 
+                    spatial_size=(32, 32), hist_bins=32, 
+                    hist_range=(0, 256), orient=9, 
+                    pix_per_cell=8, cell_per_block=2, 
+                    hog_channel=0, spatial_feat=True, 
+                    hist_feat=True, hog_feat=True)
+```
+
+A few example images after detecting the car boxes using the  ``` search_windows() ``` funciton can be seen below
+
+![alt text][boximg_before_FP_ex2]
+
+![alt text][boximg_before_FP_ex5]
+
+It could be observed from the above images that a few areas of the image without a car are also detected as areas with car. In order to filter those false positives in the image we add the number of boxes per image and do heat thresholding. These methods are implemented as described in the course. Then single box are drawn around the heat thresholded values. This method helps in eliminating the false positives.
+
+The heat images after adding the heat and thresholding can be observed in the images below
+
+![alt text][Heat_Map_ex1]
+
+![alt text][Heat_Map_ex2]
 
 
+The code for hot boxes thresholding and drawing boxes can be seen in code block 9
 
+The functions used are
+```
+add_heat(heatmap, boxes)
+heat_threshold(heatmap, threshold)
+draw_full_boxes(img, labels)
 
-
-
-
-
+```
 
 
 ##Writeup Template
