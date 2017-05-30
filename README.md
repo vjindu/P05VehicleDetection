@@ -20,7 +20,7 @@ single_img_features(image, color_space=color_space,
 
 We read in all the images of car and non-car from the dataset provided. An example of car and non car images are displayed below
 
-![alt text][car_noCar.png]
+![png][car_noCar.png]
 
 The HOG features were tested for various color spaces and the result image is displayed below.
 
