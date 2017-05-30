@@ -1,4 +1,4 @@
-# P-05 Vehicle Detection
+# CarND P05 Vehicle Detection
 
 The goals / steps of this project are the following:
 
@@ -31,8 +31,8 @@ We read in all the images of car and non-car from the dataset provided. An examp
 
 The HOG features were tested for various color spaces and the result image is displayed below.
 
-![png](HOG_RGB_Gray_HSV.png)
-![png](HOG_LUV_HLS_YUV.png)
+![png](HOG_RGB_Gray_HSV.PNG)
+![png](HOG_LUV_HLS_YUV.PNG)
 
 
 After a lot of trial and error LUV and RGB color spaces seemed to be giving the best results for training using LinearSVM classifier.
