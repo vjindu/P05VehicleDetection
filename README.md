@@ -34,6 +34,7 @@ The HOG features were tested for various color spaces and the result image is di
 ![png](HOG_RGB_Gray_HSV.png)
 ![png](HOG_LUV_HLS_YUV.png)
 
+
 After a lot of trial and error LUV and RGB color spaces seemed to be giving the best results for training using LinearSVM classifier.
 LUV seems to be performing a little better than RGB. The spatial size, orient, hog_channel were all tuned to give the best result for the available dataset. The final tuned parameters can be seen below. 
 
